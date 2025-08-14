@@ -1,0 +1,13 @@
+# JAMAIS de clés privées DNSSEC
+keys/
+# Fichiers générés par BIND
+state/*.jnl
+state/*.signed
+# Divers
+*.swp
+*.tmp
+.DS_Store
+
+# Ignore snapshots at repo root
+/db.floephec.cloud
+/db.floephec.cloud.bak.*
