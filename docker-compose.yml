@@ -1,0 +1,38 @@
+services:
+  db:
+    image: mariadb:11
+    container_name: db
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: mypass
+    volumes:
+      - dbdata:/var/lib/mysql
+      - ./sql:/docker-entrypoint-initdb.d:ro
+
+  php:
+    build: ./php
+    container_name: php
+    restart: unless-stopped
+    volumes:
+      - ./html:/var/www/html:ro
+    depends_on:
+      - db
+
+  web:
+    image: nginx:1.27-alpine
+    container_name: web
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./html:/var/www/html:ro
+    depends_on:
+      - php
+
+networks:
+  default:
+    name: webnet
+
+volumes:
+  dbdata:
