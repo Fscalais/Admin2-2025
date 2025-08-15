@@ -6,3 +6,4 @@ dbdata/
 *.swp
 *.tmp
 .DS_Store
+services/dns/state/managed-keys.bind

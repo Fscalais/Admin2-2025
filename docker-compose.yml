@@ -3,36 +3,51 @@ services:
     image: mariadb:11
     container_name: db
     restart: unless-stopped
-    environment:
-      MYSQL_ROOT_PASSWORD: mypass
+    env_file:
+      - db/root.env
+      - db/db.env
     volumes:
       - dbdata:/var/lib/mysql
       - ./sql:/docker-entrypoint-initdb.d:ro
+      - ./db/my-resolve.cnf:/etc/mysql/conf.d/my-resolve.cnf:ro
+    networks:
+      - db_net
 
   php:
     build: ./php
     container_name: php
     restart: unless-stopped
+    env_file:
+      - db/db.env
     volumes:
       - ./html:/var/www/html:ro
     depends_on:
       - db
+    networks:
+      - dmz
+      - db_net
 
   web:
-    image: nginx:1.27-alpine
+    build: ./nginx
     container_name: web
     restart: unless-stopped
     ports:
       - "80:80"
+      - "443:443"
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
       - ./html:/var/www/html:ro
+      - ./certs:/etc/ssl/local:ro
+      - ./letsencrypt:/etc/letsencrypt
+      - ./certbot-www:/var/www/certbot
     depends_on:
       - php
+    networks:
+      - dmz
 
 networks:
-  default:
-    name: webnet
+  dmz:
+  db_net:
 
 volumes:
   dbdata:

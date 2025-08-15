@@ -13,3 +13,9 @@ INSERT INTO products (product_name,product_price) VALUES
  ("Arc à flèches","20"),
  ("Maison de poupées","150")
 ON DUPLICATE KEY UPDATE product_name=VALUES(product_name), product_price=VALUES(product_price);
+
+
+
+CREATE USER IF NOT EXISTS 'wt-user'@'php' IDENTIFIED BY 'wt-pwd';
+GRANT SELECT ON `woodytoys`.* TO 'wt-user'@'php';
+FLUSH PRIVILEGES;

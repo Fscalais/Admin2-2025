@@ -1,0 +1,38 @@
+# JAMAIS de clés privées DNSSEC
+keys/
+# Fichiers générés par BIND
+state/*.jnl
+state/*.signed
+# Divers
+*.swp
+*.tmp
+.DS_Store
+
+# Ignore snapshots at repo root
+/db.floephec.cloud
+/db.floephec.cloud.bak.*
+
+# ===== DNS =====
+services/dns/keys/
+services/dns/state/*.jnl
+services/dns/state/*.signed
+
+# ===== Web / Certbot =====
+letsencrypt/
+certs/
+**/privkey.pem
+**/archive/
+**/*.jks
+**/*.p12
+
+# ===== Mail (DMS) =====
+mail/docker-data/dms/mail-data/
+mail/docker-data/dms/mail-state/
+mail/docker-data/dms/mail-logs/
+mail/docker-data/dms/config/opendkim/keys/*  # ne pas versionner la clé privée
+!mail/docker-data/dms/config/opendkim/keys/**/mail.txt  # OK de versionner le TXT public
+
+# Divers
+*.swp
+*.tmp
+.DS_Store

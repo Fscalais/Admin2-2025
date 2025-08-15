@@ -1,3 +1,4 @@
-FROM nginx:1.27-alpine
-COPY nginx.conf /etc/nginx/nginx.conf
-# le HTML viendra par bind-mount
+FROM nginx:1.27
+RUN apt-get update && apt-get install -y --no-install-recommends \
+      certbot python3-certbot-nginx ca-certificates \
+    && rm -rf /var/lib/apt/lists/*

@@ -1,0 +1,38 @@
+$TTL 3600
+@   IN  SOA ns1.floephec.cloud. hostmaster.floephec.cloud. (
+        2025081409 ; serial
+        3600       ; refresh
+        900        ; retry
+        1209600    ; expire
+        300 )      ; minimum
+
+@     IN  NS   ns1.floephec.cloud.
+@     IN  NS   ns2.floephec.cloud.
+
+ns1   IN  A    51.83.70.8
+ns2   IN  A    51.83.70.8
+
+@     IN  A    51.83.70.8
+www   IN  A    51.83.70.8
+api   IN  A    51.83.70.8
+
+
+blog  IN  CNAME  www
+
+
+
+mail  IN  A   51.83.70.8
+@     IN  MX  10 mail.floephec.cloud.
+
+@   3600   IN   TXT   "v=spf1 mx -all"
+
+
+
+mail._domainkey IN TXT (
+  "v=DKIM1; h=sha256; k=rsa; "
+  "p=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAsNaq8z7oxQVBGo1/nHE0w3v1OG40AXZ+nEkhIRq8x2i2LVs+7e/MtZusoHBNx51YuX1CGyuGKymEPEh3a5/+4ZZA/4FblHLOnBhcZFA7xfxEn9/Wphgpyht43zSFlGQR85zgLqkHayuw57TtQ8HFGlqJyT0q+clkEZrQYuGXn57ZeUeWR0clXHPePgSpytmDEzykZHcjGXvfFY"
+  "kCcyJC9nMH3I/oV+T72+8BUtA0mFgd8MNv8/2/bl1vPqdUa/15hnUHE6CCHfj6CLRgtpNfmi0OirAF4Xa1v/rFkiXuaybh7mwWH7irpXOoWgJTrU0Z64YQcJksXREguFtddwmN2wIDAQAB"
+)  ; DKIM key mail for floephec.cloud
+
+
+_dmarc 3600 IN TXT "v=DMARC1; p=none; rua=mailto:postmaster@floephec.cloud; fo=1"

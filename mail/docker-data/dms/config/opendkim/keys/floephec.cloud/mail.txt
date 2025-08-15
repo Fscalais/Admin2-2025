@@ -1,0 +1,3 @@
+mail._domainkey	IN	TXT	( "v=DKIM1; h=sha256; k=rsa; "
+	  "p=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAsNaq8z7oxQVBGo1/nHE0w3v1OG40AXZ+nEkhIRq8x2i2LVs+7e/MtZusoHBNx51YuX1CGyuGKymEPEh3a5/+4ZZA/4FblHLOnBhcZFA7xfxEn9/Wphgpyht43zSFlGQR85zgLqkHayuw57TtQ8HFGlqJyT0q+clkEZrQYuGXn57ZeUeWR0clXHPePgSpytmDEzykZHcjGXvfFY"
+	  "kCcyJC9nMH3I/oV+T72+8BUtA0mFgd8MNv8/2/bl1vPqdUa/15hnUHE6CCHfj6CLRgtpNfmi0OirAF4Xa1v/rFkiXuaybh7mwWH7irpXOoWgJTrU0Z64YQcJksXREguFtddwmN2wIDAQAB" )  ; ----- DKIM key mail for floephec.cloud

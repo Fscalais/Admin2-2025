@@ -1,8 +1,8 @@
 <?php
-$dbname = 'woodytoys';
-$dbuser = 'root';
-$dbpass = 'mypass';
-$dbhost = 'db'; // résolu par Docker Compose
+$dbname = getenv('MARIADB_DATABASE');
+$dbuser = getenv('MARIADB_USER');
+$dbpass = getenv('MARIADB_PASSWORD');
+$dbhost = getenv('MARIADB_HOST');
 
 $connect = mysqli_connect($dbhost, $dbuser, $dbpass);
 if (!$connect) { http_response_code(500); die("DB connect failed: ".mysqli_connect_error()); }

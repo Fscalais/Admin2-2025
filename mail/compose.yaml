@@ -1,0 +1,44 @@
+version: "3.8"
+
+services:
+  mailserver:
+    image: ghcr.io/docker-mailserver/docker-mailserver:latest
+    container_name: mailserver
+
+    # FQDN du serveur mail (le MX pointe vers ce nom)
+    hostname: mail.floephec.cloud
+
+    env_file:
+      - ./mailserver.env   # Assure-toi d’y avoir:  SSL_TYPE=letsencrypt
+
+    # Ports mail
+    ports:
+      - "25:25"    # SMTP  (STARTTLS possible ; pas d'auth sur 25)
+      - "143:143"  # IMAP (STARTTLS)
+      - "465:465"  # SMTPS (TLS implicite)
+      - "587:587"  # Submission (STARTTLS + AUTH)
+      - "993:993"  # IMAPS (TLS implicite)
+
+    volumes:
+      # Données / état / logs DMS
+      - ./docker-data/dms/mail-data/:/var/mail/
+      - ./docker-data/dms/mail-state/:/var/mail-state/
+      - ./docker-data/dms/mail-logs/:/var/log/mail/
+      - ./docker-data/dms/config/:/tmp/docker-mailserver/
+      - /etc/localtime:/etc/localtime:ro
+
+      # Certificats Let’s Encrypt (générés par ton conteneur web)
+      # Chemin hôte : /home/florian/web/letsencrypt  ->  conteneur : /etc/letsencrypt
+      - /home/florian/web/letsencrypt:/etc/letsencrypt:ro
+
+    restart: unless-stopped
+    stop_grace_period: 1m
+
+    # Si tu actives Fail2ban dans mailserver.env :
+    # cap_add:
+    #   - NET_ADMIN
+
+    healthcheck:
+      test: ["CMD-SHELL", "ss --listening --ipv4 --tcp | grep --silent ':smtp' || exit 1"]
+      timeout: 3s
+      retries: 0
