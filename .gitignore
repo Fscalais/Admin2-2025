@@ -7,3 +7,14 @@ dbdata/
 *.tmp
 .DS_Store
 services/dns/state/managed-keys.bind
+letsencrypt/
+certs/
+state/*.jnl
+services/dns/state/*.jnl
+services/dns/state/*.signed
+services/dns/keys/
+mail/mailserver.env
+mail/dkim/
+mail/opendkim/keys/
+mail/ssl/
+*.log
