@@ -1,3 +1,5 @@
+version: "3.9"
+
 services:
   db:
     image: flosca/woody-db:1.0
@@ -6,26 +8,67 @@ services:
       - MYSQL_ROOT_PASSWORD=pass
     deploy: { replicas: 1 }
 
-  api:
-    image: flosca/woody-api:1.1
+  # --- Microservice 1 : /api/misc/*
+  api_misc:
+    image: flosca/woody-api:1.3
     environment:
       - REDIS_HOST=redis
       - CACHE_TTL=60
       - ENABLE_CACHE=1
-    deploy: { replicas: 2 }
+    deploy: { replicas: 1 }
+
+  # --- Microservice 2 : /api/products/*
+  api_products:
+    image: flosca/woody-api:1.3
+    environment:
+      - REDIS_HOST=redis
+      - CACHE_TTL=60
+      - ENABLE_CACHE=1
+    deploy: { replicas: 1 }
+
+  # --- Microservice 3 : /api/orders/*
+  api_orders:
+    image: flosca/woody-api:1.3
+    environment:
+      - REDIS_HOST=redis
+      - CACHE_TTL=60
+      - ENABLE_CACHE=1
+      - RABBITMQ_HOST=rabbitmq
+      - RABBITMQ_USER=woody
+      - RABBITMQ_PASS=woodypass
+    deploy: { replicas: 1 }
+
+  # --- Worker asynchrone (consomme la file RabbitMQ)
+  worker:
+    image: flosca/woody-api:1.3
+    command: ["python", "worker.py"]
+    environment:
+      - RABBITMQ_HOST=rabbitmq
+      - RABBITMQ_USER=woody
+      - RABBITMQ_PASS=woodypass
+    deploy: { replicas: 1 }
 
   front:
     image: flosca/woody-front:1.0
     deploy: { replicas: 2 }
 
   reverse:
-    image: flosca/woody-reverse:1.2
+    image: flosca/woody-reverse:1.3
     ports:
       - "8081:8080"
-    depends_on: [front, api]
+    # depends_on est ignoré par Swarm, on ne le met pas
     deploy: { replicas: 2 }
 
   redis:
     image: redis:7-alpine
     command: ["redis-server","--appendonly","yes"]
+    deploy: { replicas: 1 }
+
+  rabbitmq:
+    image: rabbitmq:3.13-management
+    environment:
+      - RABBITMQ_DEFAULT_USER=woody
+      - RABBITMQ_DEFAULT_PASS=woodypass
+    ports:
+      - "15672:15672"
     deploy: { replicas: 1 }
