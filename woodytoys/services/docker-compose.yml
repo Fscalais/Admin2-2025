@@ -1,0 +1,31 @@
+services:
+  db:
+    image: flosca/woody-db:1.0
+    environment:
+      - MYSQL_DATABASE=woody
+      - MYSQL_ROOT_PASSWORD=pass
+    deploy: { replicas: 1 }
+
+  api:
+    image: flosca/woody-api:1.1
+    environment:
+      - REDIS_HOST=redis
+      - CACHE_TTL=60
+      - ENABLE_CACHE=1
+    deploy: { replicas: 2 }
+
+  front:
+    image: flosca/woody-front:1.0
+    deploy: { replicas: 2 }
+
+  reverse:
+    image: flosca/woody-reverse:1.2
+    ports:
+      - "8081:8080"
+    depends_on: [front, api]
+    deploy: { replicas: 2 }
+
+  redis:
+    image: redis:7-alpine
+    command: ["redis-server","--appendonly","yes"]
+    deploy: { replicas: 1 }
